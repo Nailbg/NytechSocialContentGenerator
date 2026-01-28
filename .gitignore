@@ -1,0 +1,57 @@
+# ----------------------
+# Python / Virtual Env
+# ----------------------
+venv/
+.env
+.env.*
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ----------------------
+# Streamlit
+# ----------------------
+.streamlit/secrets.toml
+
+# ----------------------
+# OS / Editor
+# ----------------------
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ----------------------
+# Logs & Temp Files
+# ----------------------
+*.log
+tmp/
+temp/
+
+# ----------------------
+# Outputs (generated content)
+# ----------------------
+outputs/
+generated/
+images/generated/
+
+# ----------------------
+# Notebooks (if added later)
+# ----------------------
+.ipynb_checkpoints/
+
+# ----------------------
+# API keys & credentials
+# ----------------------
+*.key
+*.pem
+credentials.json
+
+# ----------------------
+# Packaging
+# ----------------------
+build/
+dist/
+*.egg-info/
