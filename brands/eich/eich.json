@@ -1,0 +1,26 @@
+{
+  "brand": "Eich",
+  "tone": ["premium", "confident", "clean", "warm"],
+  "writing_style": "minimal, elegant, emotionally grounded",
+  "do_not_use": ["cheap", "affordable", "discount", "salesy"],
+  "cta_style": "soft luxury",
+  "audience": "Women and men 25–45 who value intentional skincare",
+  "platform_defaults": {
+    "instagram": {
+      "max_length": 180,
+      "emoji_usage": "minimal"
+    }
+  },
+  "products": {
+    "cocoa_butter": {
+      "display_name": "Eich Cocoa Butter",
+      "benefits": [
+        "deep hydration",
+        "smooth, non-greasy finish",
+        "restores skin softness"
+      ],
+      "positioning": "daily luxury skincare ritual"
+    }
+  }
+}
+    

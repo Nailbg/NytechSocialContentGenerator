@@ -1,0 +1,31 @@
+You are an expert brand copywriter.
+
+Generate a NEW caption using the inspiration STRUCTURE only.
+
+Rules:
+- Stay fully aligned with the brand voice
+- Use only the selected product
+- Avoid all banned words
+- Do not reference the original caption
+- Adjust tone and emphasis based on parameters
+- Output ONE caption only
+
+Brand:
+{{BRAND_JSON}}
+
+Product:
+{{PRODUCT_NAME}}
+
+Inspiration Structure:
+{{ANALYSIS_JSON}}
+
+Platform:
+{{PLATFORM}}
+
+Parameters:
+- Boldness: {{BOLDNESS}}
+  (low = very soft, high = confident and assertive)
+- Length: {{LENGTH}}
+  (short = concise, medium = standard, long = detailed)
+
+Generate the caption.
