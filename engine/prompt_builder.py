@@ -16,7 +16,22 @@ def build_caption_prompt(
     voice = brand_data["voice"]
     cta = brand_data["cta_style"]
 
-    return f"""
+    if preset_key == "rewrite":
+        return f"""
+Rewrite the following text for {brand_data['brand']}:
+- Keep the original structure, headings, bullets, and paragraphs
+- Maintain the flow and style of the original post
+- Tailor the text to the brand voice and values
+- Mention {product['display_name']} if relevant
+
+Original post:
+{inspiration_text}
+
+Preset Instructions: {preset_data["instructions"]}
+"""
+    else:
+
+        return f"""
 Analyze the inspiration content for STRUCTURE only.
 Do NOT reuse wording, phrasing, or sentence patterns.
 

@@ -10,7 +10,7 @@ from engine.generate_caption import generate_caption
 
 st.set_page_config(page_title="Nytech Content Brain", layout="centered")
 
-st.title("🧠 Nytech Content Brain")
+st.title("Nytech Content Generator")
 st.caption("Turn inspiration into brand-safe content")
 
 # --------------------
@@ -70,14 +70,16 @@ BOLDNESS_MAP = {
 }
 
 inspiration = st.text_area(
-    "Paste inspiration caption",
-    height=140
+    "Paste inspiration post or caption",
+    height=250,
+    placeholder="Paste the text you want to adapt"
 )
+
 
 # --------------------
 # Generate
 # --------------------
-if st.button("Generate Caption") and inspiration.strip():
+if st.button("Generate Text") and inspiration.strip():
     with st.spinner("Generating brand-safe content…"):
         result = generate_caption(
             inspiration_text=inspiration,
@@ -89,5 +91,5 @@ if st.button("Generate Caption") and inspiration.strip():
             length=length
         )
 
-    st.subheader("Final Caption")
+    st.subheader("Output")
     st.write(result)

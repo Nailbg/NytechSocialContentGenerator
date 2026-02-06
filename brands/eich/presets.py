@@ -1,4 +1,11 @@
 PRESETS = {
+    "Repurpose": {
+        "description": "Rewrite existing content for brand alignment, keeping structure and tone",
+        "instructions": (
+            "Keep the same structure, headers, and flow. "
+            "Tailor text to the brand voice and optionally include product mentions."
+        )
+    },
     "soft_luxury_ig": {
         "label": "Soft Luxury IG",
         "tone": ["warm", "serene", "luxurious"],
@@ -33,5 +40,5 @@ PRESETS = {
             "emotional payoff",
             "conversion CTA"
         ]
-    }
+    },
 }
