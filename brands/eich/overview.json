@@ -1,0 +1,375 @@
+{
+  "brand": "Eich Esthetics",
+
+  "tagline": "Natural self-care, crafted with intention.",
+
+  "voice": {
+    "tone": ["warm", "educational", "inspiring"],
+    "style": ["conversational", "informative"],
+    "personality": ["serene", "intentional", "luxurious", "grounded"],
+    "avoid_tone": ["loud", "aggressive", "salesy", "cheap"]
+  },
+
+  "messaging_pillars": [
+    "clean beauty",
+    "natural ingredients",
+    "holistic wellness",
+    "self-care rituals",
+    "mindful luxury",
+    "sustainability"
+  ],
+
+  "do_not_use": [
+    "cheap",
+    "harsh chemicals",
+    "instant miracle",
+    "synthetic",
+    "toxic",
+    "extreme claims",
+    "overnight results"
+  ],
+
+  "cta_style": {
+    "primary": "soft invitation",
+    "examples": [
+      "Incorporate this into your self-care ritual",
+      "A gentle moment of care your skin will love",
+      "Create space for intentional self-care"
+    ]
+  },
+
+  "mission": "To foster beauty and self-care through non-toxic, natural, and locally sourced body care products that support holistic well-being and environmental consciousness.",
+
+  "values": [
+    "clean beauty",
+    "sustainability",
+    "wellness-focused living",
+    "transparency",
+    "inclusivity",
+    "luxury in simplicity"
+  ],
+
+  "target_audience": {
+    "age_range": "18–45",
+    "gender": ["women", "men"],
+    "lifestyle": [
+      "health-conscious",
+      "eco-aware",
+      "wellness-focused",
+      "urban professionals"
+    ],
+    "psychographics": [
+      "values ingredient transparency",
+      "prefers ethical products",
+      "interested in aromatherapy",
+      "busy lifestyle, seeks multifunctional products"
+    ]
+  },
+
+  "sensory_identity": {
+    "visual_mood": ["minimal", "clean", "earthy", "soft luxury"],
+    "audio_mood": ["serene", "elegant", "calming"],
+    "audio_elements": [
+      "soft ambient",
+      "gentle piano",
+      "acoustic textures",
+      "water sounds",
+      "fabric rustles"
+    ],
+    "audio_donts": [
+      "loud EDM",
+      "heavy bass",
+      "harsh transitions",
+      "vocal-heavy music"
+    ]
+  },
+
+  "products": {
+    "all_purpose_butter": {
+      "display_name": "All Purpose Butter",
+      "category": "body butter",
+      "positioning": "multi-use everyday luxury balm",
+      "benefits": [
+        "deep hydration",
+        "restores skin elasticity",
+        "soothes irritation",
+        "heals dry and flaky skin",
+        "softens skin",
+        "hydrates hair and lips"
+      ],
+      "pain_points_solved": [
+        "severely dry skin",
+        "irritated skin",
+        "lack of moisture retention"
+      ],
+      "ingredients": [
+        "shea butter",
+        "avocado oil",
+        "coconut oil",
+        "vitamin E",
+        "lavender",
+        "rosemary"
+      ],
+      "sensory_notes": {
+        "texture": "rich, buttery",
+        "fragrance": "lavender and mint",
+        "usage_tip": "apply to damp skin for best results"
+      }
+    },
+
+    "chocolate_body_butter": {
+      "display_name": "Chocolate Body Butter",
+      "category": "body butter",
+      "positioning": "lightweight hydration for warm climates",
+      "benefits": [
+        "moisturizes skin",
+        "balances skin tone",
+        "smoothens texture",
+        "enhances natural glow"
+      ],
+      "pain_points_solved": [
+        "dry skin",
+        "uneven tone",
+        "heavy moisturizers"
+      ],
+      "ingredients": [
+        "shea butter",
+        "coconut oil",
+        "cocoa powder"
+      ],
+      "sensory_notes": {
+        "texture": "light, buttery",
+        "fragrance": "mild, sweet",
+        "climate_note": "formulated for sub-Saharan temperatures"
+      }
+    },
+
+    "pamper_me_bath_salt": {
+      "display_name": "Pamper Me Bath Salt",
+      "category": "bath salt",
+      "positioning": "romantic, calming bath ritual",
+      "benefits": [
+        "relieves muscle tension",
+        "calms the mind",
+        "softens skin",
+        "supports emotional relaxation"
+      ],
+      "pain_points_solved": [
+        "stress",
+        "muscle soreness",
+        "sleep difficulty"
+      ],
+      "ingredients": [
+        "epsom salt",
+        "pink himalayan salt",
+        "dried rose petals",
+        "rose essential oil"
+      ],
+      "sensory_notes": {
+        "texture": "dry, semi-fine",
+        "fragrance": "roses",
+        "ritual_tip": "use for evening relaxation"
+      }
+    },
+
+    "soothe_me_bath_salt": {
+      "display_name": "Soothe Me Bath Salt",
+      "category": "bath salt",
+      "positioning": "cooling, restorative soak",
+      "benefits": [
+        "relieves muscle stress",
+        "reduces inflammation",
+        "revives tired skin"
+      ],
+      "pain_points_solved": [
+        "physical fatigue",
+        "muscle tension",
+        "skin stress"
+      ],
+      "ingredients": [
+        "epsom salt",
+        "mint leaves",
+        "cucumber",
+        "eucalyptus leaves",
+        "vetiver essential oil"
+      ],
+      "sensory_notes": {
+        "texture": "fine powder",
+        "fragrance": "mint tea",
+        "usage_note": "best used before bed"
+      }
+    },
+
+    "glow_body_scrub": {
+      "display_name": "Glow Body Scrub",
+      "category": "body scrub",
+      "positioning": "gentle exfoliation with instant glow",
+      "benefits": [
+        "removes dead skin",
+        "improves skin texture",
+        "boosts circulation",
+        "hydrates skin",
+        "enhances radiance"
+      ],
+      "ingredients": [
+        "sugar",
+        "coffee",
+        "coconut oil",
+        "honey",
+        "liquid soap"
+      ],
+      "sensory_notes": {
+        "texture": "soft",
+        "fragrance": "coffee and coconut"
+      }
+    },
+
+    "polish_body_scrub": {
+      "display_name": "Polish Body Scrub",
+      "category": "body scrub",
+      "positioning": "deep detox exfoliation",
+      "benefits": [
+        "draws out toxins",
+        "smoothens rough areas",
+        "clears clogged pores",
+        "supports skin clarity"
+      ],
+      "ingredients": [
+        "dead sea salt",
+        "moringa leaf powder",
+        "olive oil",
+        "sweet almond oil",
+        "bergamot essential oil"
+      ],
+      "sensory_notes": {
+        "texture": "coarse",
+        "fragrance": "citrusy"
+      }
+    },
+
+    "bright_body_scrub": {
+      "display_name": "Bright Body Scrub",
+      "category": "body scrub",
+      "positioning": "brightening exfoliator for even skin tone",
+      "benefits": [
+        "brightens skin",
+        "reduces inflammation",
+        "supports skin clarity"
+      ],
+      "ingredients": [
+        "sugar",
+        "turmeric root powder",
+        "coconut oil",
+        "clary sage essential oil"
+      ],
+      "sensory_notes": {
+        "texture": "regular sugar",
+        "fragrance": "earthy"
+      }
+    },
+
+    "zobo_lip_scrub": {
+      "display_name": "Zobo Lip Scrub",
+      "category": "lip care",
+      "positioning": "gentle lip renewal",
+      "benefits": [
+        "removes flaky skin",
+        "softens lips",
+        "enhances natural lip color"
+      ],
+      "ingredients": [
+        "sugar",
+        "honey",
+        "hibiscus",
+        "coconut oil"
+      ],
+      "sensory_notes": {
+        "texture": "sticky",
+        "fragrance": "sweet"
+      }
+    },
+
+    "mint_lip_scrub": {
+      "display_name": "Mint Lip Scrub",
+      "category": "lip care",
+      "positioning": "refreshing lip exfoliation",
+      "benefits": [
+        "smoothens lips",
+        "plumps appearance",
+        "refreshes lips"
+      ],
+      "ingredients": [
+        "sugar",
+        "mint",
+        "sweet almond oil",
+        "peppermint"
+      ],
+      "sensory_notes": {
+        "texture": "regular sugar",
+        "fragrance": "minty"
+      }
+    },
+
+    "natural_lip_balm": {
+      "display_name": "Natural Lip Balm",
+      "category": "lip care",
+      "positioning": "everyday lip nourishment",
+      "benefits": [
+        "relieves dryness",
+        "soothes chapped lips",
+        "locks in moisture"
+      ],
+      "ingredients": [
+        "shea butter",
+        "beeswax",
+        "coconut oil",
+        "vitamin E",
+        "peppermint"
+      ],
+      "sensory_notes": {
+        "texture": "buttery",
+        "fragrance": "minty"
+      }
+    },
+
+    "virgin_coconut_oil": {
+      "display_name": "Virgin Coconut Oil",
+      "category": "multi-purpose oil",
+      "positioning": "pure, versatile natural oil",
+      "benefits": [
+        "hydrates skin",
+        "soothes irritation",
+        "protects hair",
+        "removes makeup",
+        "supports cuticle care"
+      ],
+      "ingredients": ["coconut"],
+      "sensory_notes": {
+        "texture": "light oil",
+        "purity": "unprocessed"
+      }
+    },
+
+    "comforting_massage_oil": {
+      "display_name": "Comforting Massage Oil",
+      "category": "massage oil",
+      "positioning": "warming therapeutic massage oil",
+      "benefits": [
+        "relieves muscle tension",
+        "enhances massage experience",
+        "supports relaxation"
+      ],
+      "ingredients": [
+        "clove oil",
+        "coconut oil",
+        "sweet almond oil",
+        "black pepper",
+        "clary sage"
+      ],
+      "sensory_notes": {
+        "texture": "silky",
+        "fragrance": "earthy and sultry"
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@ LLM_PROVIDER = os.getenv("LLM_PROVIDER", "gemini")
 # ---- Model config ----
 MODELS = {
     "gemini": {
-        "text": "gemini-1.5-flash",
+        "text": "gemini-2.5-flash",
         "image": "nano-banana-pro"
     },
     "openai": {

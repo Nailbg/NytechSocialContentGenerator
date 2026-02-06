@@ -1,11 +1,18 @@
 import google.generativeai as genai
-from engine.llm.base import BaseLLM
 
-class GeminiLLM(BaseLLM):
-    def __init__(self, model: str, api_key: str):
+
+class GeminiLLM:
+    def __init__(self, api_key: str):
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(model)
+
+        # ✅ Correct model for v1beta SDK
+        self.model = genai.GenerativeModel("gemini-2.5-flash")
 
     def generate(self, prompt: str) -> str:
         response = self.model.generate_content(prompt)
-        return response.text
+
+        # Defensive return (Gemini sometimes returns parts)
+        if hasattr(response, "text") and response.text:
+            return response.text.strip()
+
+        return str(response)
