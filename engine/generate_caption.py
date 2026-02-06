@@ -1,74 +1,29 @@
-import json
-from openai import OpenAI
+from engine.config import get_llm
+from engine.similarity import is_too_similar
+from engine.prompt_builder import build_caption_prompt
 
-client = OpenAI()
+def generate_caption(
+    inspiration_text,
+    brand_data,
+    product_key,
+    preset,
+    boldness=5,
+    length="medium"
+):
+    llm = get_llm()
 
-def generate_brand_caption(
-    inspiration_text: str,
-    brand_key: str,
-    product_key: str,
-    platform: str = "instagram",
-    boldness: str = "medium",   # low | medium | high
-    length: str = "medium"      # short | medium | long
-) -> dict:
-    """
-    Returns:
-    {
-      "analysis": {...},
-      "caption": "final generated caption"
-    }
-    """
-
-    # 1. Load brand data
-    with open(f"brands/{brand_key}/{brand_key}.json") as f:
-        brand_data = json.load(f)
-
-    product = brand_data["products"][product_key]
-
-    # 2. Load prompts
-    with open("prompts/analyze_inspiration.txt") as f:
-        analyze_prompt = f.read()
-
-    with open("prompts/transform_caption.txt") as f:
-        transform_prompt = f.read()
-
-    # 3. Analyze inspiration
-    analysis_prompt_filled = analyze_prompt.replace(
-        "{{CAPTION}}", inspiration_text
+    prompt = build_caption_prompt(
+        inspiration_text=inspiration_text,
+        brand_data=brand_data,
+        product_key=product_key,
+        preset=preset,
+        boldness=boldness,
+        length=length
     )
 
-    analysis_response = client.chat.completions.create(
-        model="gpt-4.1",
-        messages=[
-            {"role": "system", "content": "Return ONLY valid JSON."},
-            {"role": "user", "content": analysis_prompt_filled}
-        ]
-    )
+    output = llm.generate(prompt)
 
-    analysis_json = analysis_response.choices[0].message.content
+    if is_too_similar(inspiration_text, output):
+        raise ValueError("Generated content too similar to inspiration")
 
-    # 4. Generate caption
-    final_prompt = (
-        transform_prompt
-        .replace("{{BRAND_JSON}}", json.dumps(brand_data, indent=2))
-        .replace("{{PRODUCT_NAME}}", product["display_name"])
-        .replace("{{ANALYSIS_JSON}}", analysis_json)
-        .replace("{{PLATFORM}}", platform)
-        .replace("{{BOLDNESS}}", boldness)
-        .replace("{{LENGTH}}", length)
-    )
-
-    caption_response = client.chat.completions.create(
-        model="gpt-4.1",
-        messages=[
-            {"role": "system", "content": "You write brand-safe marketing copy."},
-            {"role": "user", "content": final_prompt}
-        ]
-    )
-
-    final_caption = caption_response.choices[0].message.content.strip()
-
-    return {
-        "analysis": json.loads(analysis_json),
-        "caption": final_caption
-    }
+    return output

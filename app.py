@@ -1,6 +1,8 @@
+from dotenv import load_dotenv
+load_dotenv()
 import streamlit as st
 import json
-from engine.generate_caption import generate_brand_caption
+from engine.generate_caption import generate_caption
 import os
 
 st.set_page_config(page_title="Nytech Content Brain", layout="centered")
@@ -18,7 +20,7 @@ inspiration = st.text_area("Paste inspiration caption", height=120)
 brand_key = st.selectbox("Brand", brand_keys)
 
 # Load products dynamically
-with open(f"brands/{brand_key}.json") as f:
+with open(f"brands/{brand_key}/{brand_key}.json") as f:
     brand_data = json.load(f)
 
 product_key = st.selectbox(
@@ -42,7 +44,7 @@ generate = st.button("Generate Caption")
 
 if generate and inspiration.strip():
     with st.spinner("Generating..."):
-        result = generate_brand_caption(
+        result = generate_caption(
             inspiration_text=inspiration,
             brand_key=brand_key,
             product_key=product_key,
