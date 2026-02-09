@@ -4,32 +4,36 @@ from engine.prompt_builder import build_caption_prompt
 
 
 def generate_caption(
-    inspiration_text,
+    source_text,
     brand_data,
     presets,
     product_key,
     preset_key,
+    strictness,
+    strictness_key,
+    length,
     boldness=5,
-    length="medium"
 ):
     if preset_key not in presets:
         raise ValueError(f"Preset '{preset_key}' not found for this brand")
 
     llm = get_llm()
-    preset_data = presets[preset_key]
 
     prompt = build_caption_prompt(
-        inspiration_text=inspiration_text,
+        source_text=source_text,
         brand_data=brand_data,
-        product_key=product_key,
+        presets=presets,          
         preset_key=preset_key,
+        product_key=product_key,
+        strictness=strictness,  
+        strictness_key=strictness_key,  
         boldness=boldness,
         length=length
     )
 
     output = llm.generate(prompt)
 
-    if is_too_similar(inspiration_text, output):
+    if is_too_similar(source_text, output):
         raise ValueError("Generated content too similar to inspiration")
 
     return output
