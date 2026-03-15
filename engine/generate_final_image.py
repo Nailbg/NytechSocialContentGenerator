@@ -1,8 +1,7 @@
-# engine/generate_final_image.py
+from engine.config import get_llm
 
-def generate_final_image(image_prompt, product_data, uploaded_image=None):
-    """
-    Placeholder for future image generation integration.
-    For now return None or a fake result.
-    """
-    return None
+
+def generate_final_image(final_prompt: str):
+    llm = get_llm()
+    image = llm.generate_image(final_prompt)
+    return image

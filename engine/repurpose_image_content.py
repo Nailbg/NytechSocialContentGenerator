@@ -1,7 +1,10 @@
 from engine.config import get_llm
 from engine.extract_image_text import extract_image_text
 from engine.analyze_image_layout import analyze_image_layout
-from engine.image_prompt_builder import build_image_repurpose_prompt
+from engine.image_prompt_builder import (
+    build_image_repurpose_prompt,
+    build_final_image_generation_prompt,
+)
 
 
 def repurpose_image_content(
@@ -56,8 +59,19 @@ def repurpose_image_content(
     # Step 4: Generate final repurposed output
     repurposed_output = llm.generate(prompt)
 
+    # Step 5: Build final image generation prompt
+    final_image_prompt = build_final_image_generation_prompt(
+        brand_data=brand_data,
+        product_key=product_key,
+        repurposed_output=repurposed_output,
+        image_analysis=image_analysis,
+        adaptation_level=adaptation_level,
+        optional_text=optional_text,
+    )
+
     return {
         "extracted_text": extracted_text,
         "image_analysis": image_analysis,
         "repurposed_output": repurposed_output,
+        "final_image_prompt": final_image_prompt,
     }

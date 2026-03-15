@@ -5,10 +5,14 @@ import streamlit as st
 import json
 import os
 import importlib.util
+from io import BytesIO
+import base64
 
 from engine.generate_caption import generate_caption
 from engine.repurpose_content import repurpose_content
 from engine.repurpose_image_content import repurpose_image_content
+from engine.generate_final_image import generate_final_image
+from engine.save_image import save_pil_image
 
 # --------------------
 # Page setup
@@ -29,24 +33,36 @@ brand_dirs = [
     if os.path.isdir(os.path.join("brands", d))
 ]
 
+if not brand_dirs:
+    st.error("No brand folders found in /brands")
+    st.stop()
+
 brand_key = st.selectbox("Brand", brand_dirs)
 
 # --------------------
 # Load brand overview
 # --------------------
-with open(f"brands/{brand_key}/overview.json") as f:
+overview_path = f"brands/{brand_key}/overview.json"
+if not os.path.exists(overview_path):
+    st.error(f"Missing overview.json for brand: {brand_key}")
+    st.stop()
+
+with open(overview_path) as f:
     brand_data = json.load(f)
 
 # --------------------
 # Load brand presets dynamically
 # --------------------
 preset_path = f"brands/{brand_key}/presets.py"
+if not os.path.exists(preset_path):
+    st.error(f"Missing presets.py for brand: {brand_key}")
+    st.stop()
+
 preset_spec = importlib.util.spec_from_file_location(
     f"{brand_key}_presets", preset_path
 )
 presets_module = importlib.util.module_from_spec(preset_spec)
 preset_spec.loader.exec_module(presets_module)
-
 PRESETS = presets_module.PRESETS
 
 preset_key = st.selectbox(
@@ -56,15 +72,18 @@ preset_key = st.selectbox(
 )
 
 # --------------------
-# Load strictness levels dynamically
+# Load strictness dynamically
 # --------------------
 strictness_path = f"brands/{brand_key}/strictness.py"
+if not os.path.exists(strictness_path):
+    st.error(f"Missing strictness.py for brand: {brand_key}")
+    st.stop()
+
 strictness_spec = importlib.util.spec_from_file_location(
     f"{brand_key}_strictness", strictness_path
 )
 strictness_module = importlib.util.module_from_spec(strictness_spec)
 strictness_spec.loader.exec_module(strictness_module)
-
 STRICTNESS = strictness_module.STRICTNESS
 
 strictness_key = st.selectbox(
@@ -76,10 +95,15 @@ strictness_key = st.selectbox(
 # --------------------
 # Product selector
 # --------------------
+products = brand_data.get("products", {})
+if not products:
+    st.error("No products found in brand overview.json")
+    st.stop()
+
 product_key = st.selectbox(
     "Product",
-    list(brand_data["products"].keys()),
-    format_func=lambda k: brand_data["products"][k].get("display_name", k)
+    list(products.keys()),
+    format_func=lambda k: products[k].get("display_name", k)
 )
 
 # --------------------
@@ -175,6 +199,26 @@ elif selected_mode == "image":
     can_generate = uploaded_image is not None
 
 # --------------------
+# Helper: auto-download link (best effort)
+# --------------------
+def auto_download_bytes(file_bytes: bytes, filename: str, mime: str = "image/png"):
+    """
+    Best-effort browser auto-download using HTML/JS.
+    This may work in many local browser sessions, but not guaranteed.
+    """
+    b64 = base64.b64encode(file_bytes).decode()
+    href = f"""
+    <a id="download_link" href="data:{mime};base64,{b64}" download="{filename}"></a>
+    <script>
+        const link = document.getElementById('download_link');
+        if (link) {{
+            link.click();
+        }}
+    </script>
+    """
+    st.components.v1.html(href, height=0)
+
+# --------------------
 # Generate button
 # --------------------
 if st.button("Generate Content", disabled=not can_generate):
@@ -185,6 +229,8 @@ if st.button("Generate Content", disabled=not can_generate):
             # IMAGE MODE
             # --------------------
             if selected_mode == "image":
+                # Step 1: Analyze and repurpose
+                st.info("Step 1/2: Analyzing image and generating repurposed creative...")
                 result = repurpose_image_content(
                     uploaded_image=uploaded_image,
                     brand_data=brand_data,
@@ -197,10 +243,14 @@ if st.button("Generate Content", disabled=not can_generate):
                     optional_text=optional_image_text,
                 )
 
-                st.success("Image repurposing complete!")
+                st.success("Creative repurposing complete!")
 
                 st.subheader("Extracted Text")
-                st.json(result["extracted_text"])
+                st.text_area(
+                    "Visible text from inspiration image",
+                    result["extracted_text"],
+                    height=180
+                )
 
                 st.subheader("Image Analysis")
                 st.json(result["image_analysis"])
@@ -209,8 +259,58 @@ if st.button("Generate Content", disabled=not can_generate):
                 st.text_area(
                     "Generated Repurposed Creative",
                     result["repurposed_output"],
-                    height=500
+                    height=350
                 )
+
+                with st.expander("View Final Image Prompt"):
+                    st.text_area(
+                        "Final Image Prompt",
+                        result["final_image_prompt"],
+                        height=350
+                    )
+
+                # Step 2: Final image generation
+                st.info("Step 2/2: Generating final image... this may take longer.")
+                final_image = generate_final_image(result["final_image_prompt"])
+
+                # Save permanently
+                saved = save_pil_image(
+                    final_image,
+                    output_dir="generated_images",
+                    prefix=f"{brand_key}_{product_key}"
+                )
+
+                # Display final image
+                st.success(f"Image generated and saved to: {saved['relative_path']}")
+                st.subheader("Final Generated Image")
+                st.image(final_image, use_container_width=True)
+
+                # Convert to bytes for download
+                image_buffer = BytesIO()
+                final_image.save(image_buffer, format="PNG")
+                image_bytes = image_buffer.getvalue()
+
+                # Reliable manual download button
+                st.download_button(
+                    label="⬇️ Download Generated Image",
+                    data=image_bytes,
+                    file_name=saved["filename"],
+                    mime="image/png"
+                )
+
+                # Best-effort auto-download
+                auto_download_enabled = st.checkbox(
+                    "Attempt auto-download in browser (best effort)",
+                    value=True
+                )
+
+                if auto_download_enabled:
+                    auto_download_bytes(
+                        file_bytes=image_bytes,
+                        filename=saved["filename"],
+                        mime="image/png"
+                    )
+                    st.caption("If the browser blocks auto-download, use the download button above.")
 
             # --------------------
             # REPURPOSE TEXT MODE
