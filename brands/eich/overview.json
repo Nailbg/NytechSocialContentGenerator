@@ -87,6 +87,8 @@
   "products": {
     "all_purpose_butter": {
       "display_name": "All Purpose Butter",
+      "image_path": "brands/eich/assets/products/all_purpose_butter.png",
+      "visual_notes": "Black premium tub with bold Eich branding",
       "category": "body butter",
       "positioning": "multi-use everyday luxury balm",
       "benefits": [
