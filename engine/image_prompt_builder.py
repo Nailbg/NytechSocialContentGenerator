@@ -120,6 +120,7 @@ def build_final_image_generation_prompt(
 ):
     """
     Builds the final prompt for AI image generation.
+    Assumes a product reference image may be provided separately.
     """
     brand_name = brand_data.get("brand_name", "the brand")
     product = brand_data["products"][product_key]
@@ -127,14 +128,26 @@ def build_final_image_generation_prompt(
     product_name = product.get("display_name", product_key)
     product_description = product.get("description", "")
     product_benefits = product.get("benefits", [])
+    product_claims = product.get("claims", [])
+    visual_notes = product.get("visual_notes", "")
 
     prompt = f"""
 Create a premium high-converting social media advertisement image for {brand_name}.
+
+A REFERENCE IMAGE OF THE ACTUAL PRODUCT PACKAGING MAY BE PROVIDED.
+If a product reference image is provided:
+- Use it as the authoritative visual source for the product
+- Preserve packaging shape, label structure, color palette, proportions, and recognizable design cues
+- Do NOT redesign the product packaging
+- Do NOT invent a different container, cap, label, or brand presentation
+- Keep the product realistic and brand-faithful
 
 PRODUCT:
 - {product_name}
 - {product_description}
 - Key benefits: {", ".join(product_benefits) if product_benefits else "N/A"}
+- Claims: {", ".join(product_claims) if product_claims else "N/A"}
+- Visual notes: {visual_notes or "N/A"}
 
 REPURPOSED CREATIVE COPY:
 {repurposed_output}
@@ -166,10 +179,11 @@ IMPORTANT COMPOSITION RULES:
 - Text should be integrated cleanly and be readable
 - Include the copy from the repurposed creative in a tasteful ad layout
 - Avoid distorted packaging
-- Avoid extra fingers/hands unless absolutely necessary
 - Avoid low-quality typography
 - Avoid random gibberish text
 - Ensure the final image looks like a real, premium ad creative
+- Keep the product label legible-looking and visually realistic
+- If typography rendering is weak, prioritize clean composition and realistic product hero placement over excessive on-image text
 
 FORMAT:
 - Vertical 4:5 composition

@@ -13,6 +13,7 @@ from engine.repurpose_content import repurpose_content
 from engine.repurpose_image_content import repurpose_image_content
 from engine.generate_final_image import generate_final_image
 from engine.save_image import save_pil_image
+from engine.utils import resolve_product_image_path
 
 # --------------------
 # Page setup
@@ -229,6 +230,14 @@ if st.button("Generate Content", disabled=not can_generate):
             # IMAGE MODE
             # --------------------
             if selected_mode == "image":
+                # Optional: direct check for product reference image before running
+                detected_product_ref = resolve_product_image_path(brand_key, product_key)
+
+                if detected_product_ref:
+                    st.caption(f"✅ Product reference image found: {detected_product_ref}")
+                else:
+                    st.caption("⚠️ No product reference image found. Final image will be generated from text only.")
+
                 # Step 1: Analyze and repurpose
                 st.info("Step 1/2: Analyzing image and generating repurposed creative...")
                 result = repurpose_image_content(
@@ -241,6 +250,7 @@ if st.button("Generate Content", disabled=not can_generate):
                     strictness_key=strictness_key,
                     adaptation_level=adaptation_level,
                     optional_text=optional_image_text,
+                    brand_key=brand_key,
                 )
 
                 st.success("Creative repurposing complete!")
@@ -271,7 +281,18 @@ if st.button("Generate Content", disabled=not can_generate):
 
                 # Step 2: Final image generation
                 st.info("Step 2/2: Generating final image... this may take longer.")
-                final_image = generate_final_image(result["final_image_prompt"])
+
+                product_reference_path = result.get("product_reference_path")
+
+                if product_reference_path:
+                    st.caption("🖼️ Using real product reference image for final generation.")
+                else:
+                    st.caption("📝 No product reference image available. Using prompt-only generation.")
+
+                final_image = generate_final_image(
+                    result["final_image_prompt"],
+                    product_reference_path=product_reference_path
+                )
 
                 # Save permanently
                 saved = save_pil_image(

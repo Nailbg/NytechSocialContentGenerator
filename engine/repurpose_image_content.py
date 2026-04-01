@@ -5,6 +5,7 @@ from engine.image_prompt_builder import (
     build_image_repurpose_prompt,
     build_final_image_generation_prompt,
 )
+from engine.utils import resolve_product_image_path
 
 
 def repurpose_image_content(
@@ -17,6 +18,7 @@ def repurpose_image_content(
     strictness_key,
     adaptation_level,
     optional_text=None,
+    brand_key=None,
 ):
     # Validate preset
     if preset_key not in presets:
@@ -69,9 +71,18 @@ def repurpose_image_content(
         optional_text=optional_text,
     )
 
+    # Step 6: Resolve product reference image (if brand_key is provided)
+    product_reference_path = None
+    if brand_key:
+        product_reference_path = resolve_product_image_path(
+            brand_key=brand_key,
+            product_key=product_key
+        )
+
     return {
         "extracted_text": extracted_text,
         "image_analysis": image_analysis,
         "repurposed_output": repurposed_output,
         "final_image_prompt": final_image_prompt,
+        "product_reference_path": product_reference_path,
     }

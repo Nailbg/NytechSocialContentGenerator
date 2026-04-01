@@ -17,8 +17,7 @@ class GeminiLLM:
         # Text / multimodal analysis model
         self.text_model = genai.GenerativeModel("gemini-2.5-flash")
 
-        # Image generation capable model (if available on your account)
-        # You can change this if your environment uses a different supported image model.
+        # Image generation capable model
         self.image_model_name = "gemini-2.5-flash-image"
 
     # --------------------
@@ -35,7 +34,6 @@ class GeminiLLM:
         response = self.text_model.generate_content(prompt)
         raw = getattr(response, "text", "").strip()
 
-        # Clean possible markdown fences
         raw = raw.replace("```json", "").replace("```", "").strip()
 
         try:
@@ -76,21 +74,13 @@ class GeminiLLM:
             raise ValueError(f"Failed to parse JSON response from image input:\n{raw}")
 
     # --------------------
-    # Final image generation
-    # Returns PIL Image
+    # Final image generation (prompt only)
     # --------------------
     def generate_image(self, prompt: str):
-        """
-        Attempts to generate an image using a Gemini image-capable model.
-        Returns a PIL Image if successful.
-        """
-
         image_model = genai.GenerativeModel(self.image_model_name)
 
         response = image_model.generate_content(prompt)
 
-        # The SDK response format may vary depending on model availability/version.
-        # We try multiple likely structures.
         pil_image = self._extract_image_from_response(response)
 
         if pil_image is None:
@@ -102,12 +92,38 @@ class GeminiLLM:
         return pil_image
 
     # --------------------
+    # Final image generation (prompt + product reference image)
+    # --------------------
+    def generate_image_with_reference(self, prompt: str, reference_image_path: str):
+        if not reference_image_path:
+            raise ValueError("reference_image_path is required")
+
+        if not os.path.exists(reference_image_path):
+            raise FileNotFoundError(f"Reference image not found: {reference_image_path}")
+
+        reference_image = Image.open(reference_image_path)
+
+        image_model = genai.GenerativeModel(self.image_model_name)
+
+        response = image_model.generate_content([
+            prompt,
+            reference_image
+        ])
+
+        pil_image = self._extract_image_from_response(response)
+
+        if pil_image is None:
+            raise ValueError(
+                "Image generation model did not return an image when using reference image. "
+                "Your Gemini account/model may not support image output with this model name."
+            )
+
+        return pil_image
+
+    # --------------------
     # Internal helper
     # --------------------
     def _extract_image_from_response(self, response):
-        """
-        Tries to extract an image from multiple possible Gemini SDK response shapes.
-        """
         # Strategy 1: candidates -> content -> parts
         try:
             for candidate in getattr(response, "candidates", []):
@@ -116,13 +132,11 @@ class GeminiLLM:
                     continue
 
                 for part in getattr(content, "parts", []):
-                    # Case A: inline_data
                     inline_data = getattr(part, "inline_data", None)
                     if inline_data and getattr(inline_data, "data", None):
                         image_bytes = inline_data.data
                         return Image.open(BytesIO(image_bytes))
 
-                    # Case B: data field directly
                     data = getattr(part, "data", None)
                     if data:
                         return Image.open(BytesIO(data))
@@ -139,11 +153,10 @@ class GeminiLLM:
         except Exception:
             pass
 
-        # Strategy 3: some SDKs may expose a binary blob or dict-like structures
+        # Strategy 3: dict-like fallback
         try:
             response_dict = response.to_dict() if hasattr(response, "to_dict") else None
             if response_dict:
-                # Try to find inlineData in nested dict
                 candidates = response_dict.get("candidates", [])
                 for candidate in candidates:
                     content = candidate.get("content", {})
